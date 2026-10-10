@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Your Stats — Sandie</title>
-<meta name="description" content="Sign in to see your Sandie stats: handicap trend, scoring breakdown, Tiger 5, putting, courses and more.">
+<meta name="description" content="Sign in to see your Sandie stats: handicap trend, scoring breakdown, Sandie 5, putting, courses and more.">
 <meta name="theme-color" content="#0F2A1D">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -301,7 +301,7 @@ function render(){
   <div class="kpi hero"><div class="l">Handicap Index</div><div class="v">${fmtIdx(ix)}</div><div class="s">${ixDelta==null?'Current index':ixDelta===0?'Same as 30 days ago':`${ixDelta<0?'▼':'▲'} ${Math.abs(ixDelta).toFixed(1)} vs 30 days ago`}</div></div>
   <div class="kpi"><div class="l">Avg Score (18)</div><div class="v">${st.avg==null?'—':st.avg.toFixed(1)}</div><div class="s">${st.f18.length} finished 18-hole rounds</div></div>
   <div class="kpi"><div class="l">Best Round</div><div class="v">${st.best?st.best.score:'—'}</div><div class="s">${st.best?esc(st.best.course)+' · '+fmtDate(st.best.date):'Finish an 18 to set one'}</div></div>
-  <div class="kpi"><div class="l">Tiger 5 per 18</div><div class="v">${st.t5==null?'—':st.t5.toFixed(1)}</div><div class="s">${rating||'Misses per 18 holes'}</div></div>
+  <div class="kpi"><div class="l">Sandie 5 per 18</div><div class="v">${st.t5==null?'—':st.t5.toFixed(1)}</div><div class="s">${rating||'Misses per 18 holes'}</div></div>
  </div>
  <div class="grid">
   <div class="panel w8"><h2>Handicap Index Over Time</h2><p class="sub">Your index after each rated round (line), with that round’s differential (dots). All time.</p><div id="c-index"></div>
@@ -321,12 +321,12 @@ function render(){
    <p class="sub" style="margin-top:10px">${[3,4,5].filter(k=>st.byPar[k]).map(k=>`Par ${k}: ${st.byPar[k].avg.toFixed(2)} avg over ${st.byPar[k].n} holes`).join(' · ')}</p></div>
   <div class="panel w4"><h2>Front vs Back</h2><p class="sub">Average to par on each nine, finished 18s.</p>${st.nineSplit?hbars([{label:'Front 9',value:Math.max(0,st.nineSplit.front),display:rel(Math.round(st.nineSplit.front*10)/10)},{label:'Back 9',value:Math.max(0,st.nineSplit.back),display:rel(Math.round(st.nineSplit.back*10)/10)}]):'<p class="empty">Finish an 18 to compare.</p>'}
    ${st.nineSplit?`<p class="sub" style="margin-top:10px">You’re ${Math.abs(st.nineSplit.front-st.nineSplit.back)<.3?'about even on both nines':`stronger on the ${st.nineSplit.front<st.nineSplit.back?'front':'back'} by ${Math.abs(st.nineSplit.front-st.nineSplit.back).toFixed(1)} strokes`}.</p>`:''}</div>
-  <div class="panel w4"><h2>Where the Strokes Go</h2><p class="sub">Tiger 5 misses per 18 holes, by rule.</p>${hbars(st.rules.map(([l,v])=>({label:l,value:v,display:v.toFixed(1)})).sort((a,b)=>b.value-a.value))}</div>
+  <div class="panel w4"><h2>Where the Strokes Go</h2><p class="sub">Sandie 5 misses per 18 holes, by rule.</p>${hbars(st.rules.map(([l,v])=>({label:l,value:v,display:v.toFixed(1)})).sort((a,b)=>b.value-a.value))}</div>
   <div class="panel"><h2>Courses</h2><p class="sub">Rounds in this period, by course.</p>${courseTable(rs)}</div>
   <div class="panel"><h2>You vs Friends</h2><p class="sub">Handicap index, lowest first. You’re highlighted.</p>${friendsCompare(ix)}</div>
   <div class="panel w12"><h2>Off the Course</h2><p class="sub">Logged hole by hole this period.</p>
    <div class="extras"><div><b>🍺 ${st.extras.beer}</b><span>Beers${rs.length?' · '+(st.extras.beer/rs.length).toFixed(1)+'/round':''}</span></div><div><b>💥 ${st.extras.shot}</b><span>Shotguns${st.extras.beer?' · '+Math.round(st.extras.shot/st.extras.beer*100)+'% of beers':''}</span></div><div><b>💨 ${st.extras.gb}</b><span>Rips${rs.length?' · '+(st.extras.gb/rs.length).toFixed(1)+'/round':''}</span></div><div><b>🪃 ${st.extras.club}</b><span>Thrown clubs</span></div><div><b>🍄 ${st.extras.mush}</b><span>Mushrooms</span></div></div></div>
-  <div class="panel w12"><h2>Recent Rounds</h2><p class="sub">This period, newest first.</p><div class="scroll"><table><thead><tr><th>Date</th><th>Course</th><th class="n">Score</th><th class="n">To Par</th><th class="n">Putts</th><th class="n">Tiger 5</th><th class="n">Diff</th></tr></thead><tbody>${[...rs].reverse().slice(0,25).map(r=>`<tr><td>${fmtDate(r.date)}</td><td>${esc(r.course)}${r.n===9?' (9)':''}</td><td class="n"><b>${r.score}</b></td><td class="n">${r.complete?rel(r.score-r.parPlayed):'—'}</td><td class="n">${r.putts==null?'—':r.putts}</td><td class="n">${r.t5}</td><td class="n">${r.diff==null?'—':r.diff.toFixed(1)}</td></tr>`).join('')}</tbody></table></div></div>
+  <div class="panel w12"><h2>Recent Rounds</h2><p class="sub">This period, newest first.</p><div class="scroll"><table><thead><tr><th>Date</th><th>Course</th><th class="n">Score</th><th class="n">To Par</th><th class="n">Putts</th><th class="n">Sandie 5</th><th class="n">Diff</th></tr></thead><tbody>${[...rs].reverse().slice(0,25).map(r=>`<tr><td>${fmtDate(r.date)}</td><td>${esc(r.course)}${r.n===9?' (9)':''}</td><td class="n"><b>${r.score}</b></td><td class="n">${r.complete?rel(r.score-r.parPlayed):'—'}</td><td class="n">${r.putts==null?'—':r.putts}</td><td class="n">${r.t5}</td><td class="n">${r.diff==null?'—':r.diff.toFixed(1)}</td></tr>`).join('')}</tbody></table></div></div>
  </div></div></div>`;
  $('#main').innerHTML=h;
  $('#main').querySelectorAll('[data-per]').forEach(b=>b.addEventListener('click',()=>{S.period=b.dataset.per;render()}));
